@@ -1,0 +1,34 @@
+name: Docker Deploy
+
+on:
+  workflow_call:
+    inputs:
+      platforms:
+        description: "Comma-separated list of target platforms (e.g. linux/amd64,linux/arm64)"
+        required: false
+        type: string
+        default: "linux/amd64,linux/arm64"
+      tags:
+        description: "Newline-separated image tags to apply"
+        required: false
+        type: string
+        default: ""
+      build_args:
+        description: "Newline-separated build arguments"
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    name: ☕ CoffeeTime
+    uses: datastudy-nl/coffeetime/.github/workflows/docker-build.yml@main
+    with:
+      platforms: ${{ inputs.platforms }}
+      tags: ${{ inputs.tags }}
+      build_args: ${{ inputs.build_args }}
+    secrets: inherit

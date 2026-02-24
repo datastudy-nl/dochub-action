@@ -1,10 +1,56 @@
 # dochub-action
 
-Reusable GitHub Actions workflow for Docker image builds & deployments via [CoffeeTime](https://github.com/datastudy-nl/coffeetime).
+Reusable GitHub Actions workflows for [DocumentationHub](https://documentation-hub.com) and Docker deployments via [CoffeeTime](https://github.com/datastudy-nl/coffeetime).
 
-## Usage
+## Workflows
 
-Add this to your repository's `.github/workflows/ci.yaml`:
+### 📚 Generate Documentation
+
+Automatically trigger DocumentationHub to generate and PR documentation for your repository.
+
+#### Quick Start
+
+1. Add your DocumentationHub API key as a repository secret named `DOCUMENTATIONHUB_API_KEY`
+2. Create `.github/workflows/documentationhub.yml`:
+
+```yaml
+name: DocumentationHub - Generate Docs
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+  workflow_dispatch:
+
+jobs:
+  docs:
+    uses: datastudy-nl/dochub-action/.github/workflows/generate-docs.yml@main
+    secrets:
+      api_key: ${{ secrets.DOCUMENTATIONHUB_API_KEY }}
+```
+
+#### Inputs
+
+| Name       | Required | Default                          | Description                                    |
+|------------|----------|----------------------------------|------------------------------------------------|
+| `base_url` | No       | `https://documentation-hub.com`  | DocumentationHub instance URL                  |
+| `auto_pr`  | No       | `true`                           | Automatically create a PR with generated docs  |
+
+#### Secrets
+
+| Name      | Required | Description                              |
+|-----------|----------|------------------------------------------|
+| `api_key` | Yes      | Your DocumentationHub API key (from dashboard) |
+
+---
+
+### ☕ Docker Deploy
+
+Docker image builds & deployments via CoffeeTime.
+
+#### Usage
 
 ```yaml
 name: CI
@@ -31,7 +77,7 @@ jobs:
     secrets: inherit
 ```
 
-## Inputs
+#### Inputs
 
 | Name         | Required | Default                      | Description                                    |
 |--------------|----------|------------------------------|------------------------------------------------|

@@ -1,0 +1,32 @@
+name: DocumentationHub - Generate Docs
+
+on:
+  workflow_call:
+    inputs:
+      base_url:
+        description: "DocumentationHub instance URL"
+        required: false
+        type: string
+        default: "https://documentation-hub.com"
+      auto_pr:
+        description: "Automatically create a PR with generated docs"
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      api_key:
+        description: "Your DocumentationHub API key (from dashboard)"
+        required: true
+
+jobs:
+  generate-docs:
+    name: 📚 Generate Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger DocumentationHub
+        run: |
+          curl -sf -X POST "${{ inputs.base_url }}/api/webhook/generate" \
+            -H "Content-Type: application/json" \
+            -H "X-Api-Key: ${{ secrets.api_key }}" \
+            -d "{\"repository\": \"${{ github.repository }}\", \"auto_pr\": ${{ inputs.auto_pr }}}"
+        shell: bash

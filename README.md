@@ -19,6 +19,8 @@ name: DocumentationHub - Generate Docs
 on:
   push:
     branches: [main]
+    branches-ignore:
+      - 'documentationhub-run-*'
     paths-ignore:
       - '**/*.md'
       - 'docs/**'
